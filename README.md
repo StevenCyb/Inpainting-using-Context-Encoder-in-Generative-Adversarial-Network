@@ -24,7 +24,7 @@ Then I run the following command to perform a prediction:
 ```
 python3 predict.py -i ./media/0.jpg -m ./media/0_mask.jpg -o ./media/0_prediction.jpg
 ```
-The Input images and masks looked like the upper figure.
+The Input images and masks looked like the `Masked-Image` and `Mask` from the upper figure.
 Where the white area characterised the region to inpaint.
 
 You can get more information about available arguments by using the argument `-h`.
