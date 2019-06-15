@@ -1,6 +1,7 @@
 # Inpainting using Context-Encoder and Generative-Adversarial-Network
 I was excited about the inpainting project from [here](https://github.com/MingtaoGuo/ContextEncoder_Cat-s_head_Inpainting_TensorFlow), which in turn is based on the paper [Context Encoders: Feature Learning by Inpainting](https://arxiv.org/abs/1604.07379). Therefore I wanted to try my own implementation.
 Some parts are from the other project, so have a look at the other project and the original paper.
+In addition, I also added some own modifications, e.g. an additional layer in the decoder or the tiling of the pictures.
 # Table Of Contents
 - [Small Evaluation](#small_evaluation)
 - [How To Use It](#how_to_use_it)
