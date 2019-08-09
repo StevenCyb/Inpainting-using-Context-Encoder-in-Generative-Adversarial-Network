@@ -35,7 +35,7 @@ mask[np.where((mask != [0, 0, 0]).all(axis=2))] = [1, 1, 1]
 # Initalize the GAN (Context Encoder(Generator) and Discriminator) 
 network = Network(tiles=args["tiles"], shape=args["shape"])
 # Load the weights
-network.load_weights(weights_path=args["weights"])
+network.load_weights_generator(weights_path=args["weights"])
 # Start prediction and save the results
 prediction = network.predict(image, mask)
 cv2.imwrite(args["output"], cv2.cvtColor(prediction, cv2.COLOR_RGB2BGR))

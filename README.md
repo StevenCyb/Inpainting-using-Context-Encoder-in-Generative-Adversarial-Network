@@ -7,7 +7,7 @@ In addition, I also added some own modifications, e.g. an additional layer in th
 - [How To Use It](#how_to_use_it)
 <a name="small_evaluation"></a>
 ## Small Evaluation
-The following result needed 1:10h (30k epochs) on a GTX1080TI.
+The following result needed 1:10h with batch size of 1 and 30k epochs on a GTX1080TI.
 ![Training_vis](/media/training.gif)
 ![results](/media/results.png)
 <a name="how_to_use_it"></a>
@@ -15,7 +15,7 @@ The following result needed 1:10h (30k epochs) on a GTX1080TI.
 First I created the directory `weights`. Then I copied the training data into the directory `training`.
 For the upper training I used the following command:
 ```
-python3 train.py -mar 5 -mal 0 -mac 0 -batch_size 2
+python3 train.py -mar 5 -mal 0 -mac 0 -bs 2
 ```
 The arguments `-mar` define the max. ammount of random ractangles for the random mask.
 In addition I disable the random drawing of lines and circles by setting `-mal` and `-mac` to `0`.

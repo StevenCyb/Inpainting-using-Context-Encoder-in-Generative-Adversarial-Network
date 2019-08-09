@@ -18,6 +18,7 @@ ap.add_argument("-mil", "--mask_min_lines", required=False, type=int, default=1,
 ap.add_argument("-mal", "--mask_max_lines", required=False, type=int, default=3, help="Max. ammount of lines for random mask (default=3).")
 ap.add_argument("-mic", "--mask_min_circles", required=False, type=int, default=1, help="Min. ammount of circles for random mask (default=1).")
 ap.add_argument("-mac", "--mask_max_circles", required=False, type=int, default=3, help="Max. ammount of circles for random mask (default=3).")
+ap.add_argument("-c", "--checkpoint", required=False, default='', help="Continue with checkpoint from [...].")
 args = vars(ap.parse_args())
 
 # Verify the passed parameters
@@ -61,5 +62,8 @@ if len(training_images) == 0:
 
 # Initalize the GAN (Context Encoder(Generator) and Discriminator) 
 network = Network(tiles=args["tiles"], shape=args["shape"])
+# Load checkpoint if is setted
+if args["checkpoint"] != '':
+	network.load_weights(weights_path=args["weights"])
 # Start training
 network.train(images=training_images, epochs=args["epochs"], batch_size=args["batch_size"], weights_path=args["weights"], saving_epochs=args["saving_epochs"], mask_min_rectangles=args["mask_min_rectangles"], mask_max_rectangles=args["mask_max_rectangles"], mask_min_lines=args["mask_min_lines"], mask_max_lines=args["mask_max_lines"], mask_min_circles=args["mask_min_circles"], mask_max_circles=args["mask_max_circles"])

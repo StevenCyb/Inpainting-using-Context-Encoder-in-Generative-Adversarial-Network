@@ -50,9 +50,16 @@ class Network:
     def load_weights(self, weights_path='./weights/weights.ckpt'):
         if not os.path.isdir(os.path.dirname(weights_path)):
             raise Exception("Cannot finde weights on path '" + weights_path + "'")
-        # Load the weights for the generator
-        #saver = tf.train.Saver(tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "generator"))
+        # Load the weights for the generator and discriminator
         saver = tf.train.Saver()
+        saver.restore(self.sess, weights_path)
+        print('Weights loaded.')
+		
+    def load_weights_generator(self, weights_path='./weights/weights.ckpt'):
+        if not os.path.isdir(os.path.dirname(weights_path)):
+            raise Exception("Cannot finde weights on path '" + weights_path + "'")
+        # Load the weights for the generator only
+        saver = tf.train.Saver(tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, "generator"))
         saver.restore(self.sess, weights_path)
 
     def create_generator(self, input):
