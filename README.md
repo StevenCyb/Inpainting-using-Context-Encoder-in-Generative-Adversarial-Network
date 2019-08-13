@@ -15,7 +15,7 @@ The following result needed 1:10h with batch size of 1 and 30k epochs on a GTX10
 First I created the directory `weights`. Then I copied the training data into the directory `training`.
 For the upper training I used the following command:
 ```
-python3 train.py -mar 5 -mal 0 -mac 0 -bs 2
+python3 train.py -mar 3 -mal 0 -mac 0 -bs 1
 ```
 The arguments `-mar` define the max. ammount of random ractangles for the random mask.
 In addition I disable the random drawing of lines and circles by setting `-mal` and `-mac` to `0`.
