@@ -15,9 +15,9 @@ ap.add_argument("-se", "--saving_epochs", required=False, type=int, default=100,
 ap.add_argument("-mir", "--mask_min_rectangles", required=False, type=int, default=1, help="Min. ammount of rectangles for random mask (default=1).")
 ap.add_argument("-mar", "--mask_max_rectangles", required=False, type=int, default=3, help="Max. ammount of rectangles for random mask (default=3).")
 ap.add_argument("-mil", "--mask_min_lines", required=False, type=int, default=1, help="Min. ammount of lines for random mask (default=1).")
-ap.add_argument("-mal", "--mask_max_lines", required=False, type=int, default=3, help="Max. ammount of lines for random mask (default=3).")
+ap.add_argument("-mal", "--mask_max_lines", required=False, type=int, default=0, help="Max. ammount of lines for random mask (default=3).")
 ap.add_argument("-mic", "--mask_min_circles", required=False, type=int, default=1, help="Min. ammount of circles for random mask (default=1).")
-ap.add_argument("-mac", "--mask_max_circles", required=False, type=int, default=3, help="Max. ammount of circles for random mask (default=3).")
+ap.add_argument("-mac", "--mask_max_circles", required=False, type=int, default=0, help="Max. ammount of circles for random mask (default=3).")
 ap.add_argument("-c", "--checkpoint", required=False, default='', help="Continue with checkpoint from [...].")
 args = vars(ap.parse_args())
 
@@ -54,7 +54,7 @@ if not isinstance(args["mask_max_circles"], int) or args["mask_max_circles"] < 0
 training_images = []
 for image_path in os.listdir(args["dataset_path"]):
     if image_path.endswith(".jpg") or image_path.endswith(".png"):
-        training_images.append(cv2.cvtColor(cv2.imread(args["dataset_path"] + "/" + image_path, 3), cv2.COLOR_BGR2RGB))
+        training_images.append(cv2.imread(args["dataset_path"] + "/" + image_path, 3))
 
 # Check if at least one image to train exists
 if len(training_images) == 0:

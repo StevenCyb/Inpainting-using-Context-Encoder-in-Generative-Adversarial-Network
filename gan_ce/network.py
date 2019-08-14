@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 from copy import deepcopy
+from random import randint
 import tensorflow as tf
 from tensorflow.contrib.layers import apply_regularization, l2_regularizer
 import gan_ce.network_utils as nu
@@ -103,7 +104,7 @@ class Network:
             image = cv2.resize(image, (self.image_resize_to[1], self.image_resize_to[0]))
             for r in range(0, image.shape[0], self.shape[0]):
                 for c in range(0, image.shape[1], self.shape[1]):
-                    image_tiles.append(image[r:r+self.shape[0], c:c+self.shape[1]] / 127.5 - 1.0)
+                    image_tiles.append((image[r:r+self.shape[0], c:c+self.shape[1]] / 127.5) - 1.0)
 
         # Remove unneded image to save memory          
         images = None
@@ -120,20 +121,20 @@ class Network:
                 # Create a random mask
                 random_mask = np.zeros([self.shape[0], self.shape[1]])
                 # Draw rectangles
-                if mask_max_rectangles>0 and mask_max_rectangles<mask_min_rectangles:
-                    for _ in range(np.random.randint(mask_min_rectangles, mask_max_rectangles)):
+                if mask_max_rectangles>0 and mask_max_rectangles>mask_min_rectangles:
+                    for _ in range(randint(mask_min_rectangles, mask_max_rectangles)):
                         X1, Y1 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         X2, Y2 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         cv2.rectangle(random_mask, (X1, Y1), (X2, Y2), (1, 1, 1), cv2.FILLED)
                 # Drawlines with a width between 3 and 10% of the height
-                if mask_max_lines>0 and mask_max_lines<mask_min_lines:
-                    for _ in range(np.random.randint(mask_min_lines, mask_max_lines)):
+                if mask_max_lines>0 and mask_max_lines>mask_min_lines:
+                    for _ in range(randint(mask_min_lines, mask_max_lines)):
                         X1, Y1 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         radius = np.random.randint(3, int(self.shape[0] * 0.1))
                         cv2.circle(random_mask, (X1, Y1), radius, (1, 1, 1), -1)
                 # Draw circles with a width between 3 and 20% of the height
-                if mask_max_circles>0 and mask_max_circles<mask_min_circles:
-                    for _ in range(np.random.randint(mask_min_circles, mask_max_circles)):
+                if mask_max_circles>0 and mask_max_circles>mask_min_circles:
+                    for _ in range(randint(mask_min_circles, mask_max_circles)):
                         X1, Y1 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         radius = np.random.randint(3, int(self.shape[0] * 0.2))
                         cv2.circle(random_mask, (X1, Y1), radius, (1, 1, 1), -1)
@@ -144,6 +145,7 @@ class Network:
                 masked_batch[batch_idx][np.where((random_mask==[1, 1, 1]).all(axis=2))] = [1, 1, 1]
                 # Add the same tile as ground truth for the Disciminator
                 ground_truth_batch[batch_idx] = deepcopy(image_tiles[index])
+                ground_truth_batch[batch_idx][np.where((random_mask==[0, 0, 0]).all(axis=2))] = [1, 1, 1]
                 batch_idx += 1
 
             # Train the Disciminator
@@ -177,7 +179,7 @@ class Network:
         for r in range(0, image.shape[0], self.shape[0]):
             for c in range(0,image.shape[1], self.shape[1]):
                 # Extract a tile out of the image and normalize to -1 to 1
-                chunked_image = image[r:r+self.shape[0], c:c+self.shape[1]] / 127.5 - 1.0
+                chunked_image = (image[r:r+self.shape[0], c:c+self.shape[1]] / 127.5) - 1.0
                 chunked_mask = mask[r:r+self.shape[0], c:c+self.shape[1]]
                 # Mask the image by setting the inpainting regions to [1,1,1]
                 chunked_image[np.where((chunked_mask==[1, 1, 1]).all(axis=2))] = [1, 1, 1]

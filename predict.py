@@ -27,9 +27,9 @@ if not os.path.isfile(args["mask"]):
     raise Exception("Path to mask is invalid.")
 
 # Load the image to inpaint
-image = cv2.cvtColor(cv2.imread(args["image"], 3), cv2.COLOR_BGR2RGB)
+image = cv2.imread(args["image"], 3)
 # Load the mask to inpaint and norm it to [0,0,0] -> [1,1,1]
-mask = cv2.cvtColor(cv2.imread(args["mask"], 3), cv2.COLOR_BGR2RGB)
+mask = cv2.imread(args["mask"], 3)
 mask[np.where((mask != [0, 0, 0]).all(axis=2))] = [1, 1, 1]
 
 # Initalize the GAN (Context Encoder(Generator) and Discriminator) 
@@ -38,4 +38,4 @@ network = Network(tiles=args["tiles"], shape=args["shape"])
 network.load_weights_generator(weights_path=args["weights"])
 # Start prediction and save the results
 prediction = network.predict(image, mask)
-cv2.imwrite(args["output"], cv2.cvtColor(prediction, cv2.COLOR_RGB2BGR))
+cv2.imwrite(args["output"], prediction)
