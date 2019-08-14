@@ -14,6 +14,8 @@ class Network:
         self.tiles = tiles
         # Calculate the size of the input image
         self.image_resize_to = (tiles[0]*shape[0],tiles[1]*shape[1])
+        # To store avg. mse
+        self.avg_mse = 0.0
 
         # Reset old session stuff because of the recovery bug (see https://github.com/tflearn/tflearn/issues/527)
         tf.reset_default_graph()
@@ -96,6 +98,14 @@ class Network:
             x = tf.sigmoid(x)
             return x
 
+    def calculate_mse(self, batch_size, a, b):
+        mse = 0.0
+        for i in range(batch_size):
+            err = np.sum((((a[i, :, :, :] + 1) * 127.5) - ((b[i, :, :, :] + 1) * 127.5)) ** 2)
+            err /= float(self.shape[0] * self.shape[1])
+            mse += err
+        return mse / batch_size
+
     def train(self, images=[], epochs=50000, batch_size=4, weights_path='./weights/weights.ckpt.index', saving_epochs=100, mask_min_rectangles=1, mask_max_rectangles=3, mask_min_lines=1, mask_max_lines=3, mask_min_circles=1, mask_max_circles=3):
         # Create tiles out of the training images and normalize to -1 to 1
         saver = tf.train.Saver()
@@ -156,8 +166,13 @@ class Network:
             [discriminator_loss, generator_loss, predicted_image] = self.sess.run([self.discriminator_loss, self.generator_loss, self.generator],
                         feed_dict={self.masked_x_in: masked_batch, self.x_in: ground_truth_batch, self.is_training: False})
 
+            # Calculate the current and avg. mse
+            mse = self.calculate_mse(batch_size, predicted_image, ground_truth_batch)
+            current_total = epoch * batch_size
+            self.avg_mse = ((self.avg_mse * current_total) + (mse * batch_size)) / (current_total + batch_size)
+
             # Print the current epoch and losses
-            print(("epoch: %d, Discriminator_loss: %g, Generator_loss: %g" % (epoch, discriminator_loss, generator_loss)))
+            print(("Epoch: %d/%d, Discriminator_loss: %g, Generator_loss: %g, Current-MSE: %g, Avg.-MSE: %g" % (epoch, epochs - 1, discriminator_loss, generator_loss, round(mse, 2), round(self.avg_mse, 2))))
             
             # Save the weights if the specified epoch reached
             if (epoch + 1) % saving_epochs == 0:
