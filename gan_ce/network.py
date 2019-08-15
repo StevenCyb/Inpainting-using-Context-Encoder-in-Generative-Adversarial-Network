@@ -155,7 +155,6 @@ class Network:
                 masked_batch[batch_idx][np.where((random_mask==[1, 1, 1]).all(axis=2))] = [1, 1, 1]
                 # Add the same tile as ground truth for the Disciminator
                 ground_truth_batch[batch_idx] = deepcopy(image_tiles[index])
-                ground_truth_batch[batch_idx][np.where((random_mask==[0, 0, 0]).all(axis=2))] = [1, 1, 1]
                 batch_idx += 1
 
             # Train the Disciminator
