@@ -131,19 +131,19 @@ class Network:
                 # Create a random mask
                 random_mask = np.zeros([self.shape[0], self.shape[1]])
                 # Draw rectangles
-                if mask_max_rectangles>0 and mask_max_rectangles>mask_min_rectangles:
+                if mask_max_rectangles>0 and mask_max_rectangles>=mask_min_rectangles:
                     for _ in range(randint(mask_min_rectangles, mask_max_rectangles)):
                         X1, Y1 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         X2, Y2 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         cv2.rectangle(random_mask, (X1, Y1), (X2, Y2), (1, 1, 1), cv2.FILLED)
                 # Draw lines
-                if mask_max_lines>0 and mask_max_lines>mask_min_lines:
+                if mask_max_lines>0 and mask_max_lines>=mask_min_lines:
                     for _ in range(randint(mask_min_lines, mask_max_lines)):
                         X1, Y1 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         radius = np.random.randint(3, int(self.shape[0] * 0.1))
                         cv2.circle(random_mask, (X1, Y1), radius, (1, 1, 1), -1)
                 # Draw circles
-                if mask_max_circles>0 and mask_max_circles>mask_min_circles:
+                if mask_max_circles>0 and mask_max_circles>=mask_min_circles:
                     for _ in range(randint(mask_min_circles, mask_max_circles)):
                         X1, Y1 = np.random.randint(0, self.shape[0]), np.random.randint(0, self.shape[1])
                         radius = np.random.randint(3, int(self.shape[0] * 0.2))
