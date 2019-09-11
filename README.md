@@ -1,4 +1,5 @@
-# ***This repository is deprecated and does not work as planned. A new version will be released in the next days and linked here.***
+# ***This repository is deprecated and does not work as planned. [The new version is released on the Inpainting-using-Context-Encoder-in-Generative-Adversarial-Network-V2 repo.](https://github.com/StevenCyb/Inpainting-using-Context-Encoder-in-Generative-Adversarial-Network-V2)***
+
 
 # Inpainting using Context-Encoder and Generative-Adversarial-Network
 I was excited about the inpainting project from [here](https://github.com/MingtaoGuo/ContextEncoder_Cat-s_head_Inpainting_TensorFlow), which in turn is based on the paper [Context Encoders: Feature Learning by Inpainting](https://arxiv.org/abs/1604.07379). Therefore I wanted to try my own implementation.
